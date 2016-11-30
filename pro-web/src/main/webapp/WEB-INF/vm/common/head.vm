@@ -7,6 +7,8 @@
     <link href="$!homeModule.getTarget('/assets/css/bootstrap.min.css')" rel="stylesheet"/>
 	<link rel="stylesheet" href="$!homeModule.getTarget('/assets/jqgrid/ui.jqgrid.erp.css')" />
     <link rel="stylesheet" href="$!erpModule.getTarget('/assets/css/ace.min.css')"/>
+    <link rel="stylesheet" href="$!erpModule.getTarget('/assets/css/ace-skins.min.css')"/>
+    <link rel="stylesheet" href="$!homeModule.getTarget('/assets/css/ace-rtl.min.css')" />
     <link rel="stylesheet" href="$!homeModule.getTarget('/assets/css/font-awesome.min.css')"/>
     <link rel="stylesheet" href="$!homeModule.getTarget('/assets/loading/jquery.showLoading.css')"/>
 	<link rel="stylesheet" href="$!homeModule.getTarget('/assets/chosen/chosen.min.css')"/>
@@ -17,4 +19,5 @@
         .ui-jqgrid-bdiv { overflow: hidden!important }
     </style>
     <script src="$!homeModule.getTarget('/assets/js/jquery-1.11.0.min.js')"></script>
+
 </head>
