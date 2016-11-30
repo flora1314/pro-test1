@@ -1,5 +1,6 @@
 package com.flora.web.controller;
 
+import com.flora.domain.common.PageVO;
 import com.flora.domain.common.RemoteResult;
 import com.wm.nb.web.WmBaseController;
 import org.slf4j.Logger;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/common")
@@ -29,13 +32,20 @@ public class CommonController extends WmBaseController {
 	}
 
 	/**
-	 * @param key
+	 * @param param
 	 * @return
 	 */
 	@RequestMapping(value = "/loadData", method = { RequestMethod.POST, RequestMethod.GET })
-	public @ResponseBody RemoteResult loadData(String key) {
+	public @ResponseBody RemoteResult loadData(String param, PageVO<Map<String, Object>> page) {
 		try {
-			return RemoteResult.success(new ArrayList<Long>());
+			List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+			list.add(new HashMap<String, Object>());
+			list.add(new HashMap<String, Object>());
+			list.add(new HashMap<String, Object>());
+			list.add(new HashMap<String, Object>());
+			page.setData(list);
+			page.setTotalCount(100);
+			return RemoteResult.success(page);
 		} catch (Exception e) {
 			logger.error("发生异常.", e);
 			return RemoteResult.failure("系统异常");

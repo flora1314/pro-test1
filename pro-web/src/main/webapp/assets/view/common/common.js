@@ -123,7 +123,41 @@ jQuery.extend({
     //隐藏提示
     hideBlock: function (callback) {
         $.unblockUI({onUnblock:callback});
+    },
+
+    /**
+     * ajax请求通用处理类
+     */
+    executeAjax: function (requestUrl, requestType, requestParam, successFn, errorFn) {
+        $.ajax({
+            url: requestUrl,
+            type: requestType,
+            data: requestParam,
+            success: function (result) {
+                if (result.code && result.code == '0000' && result.data) {
+                    if (successFn) {
+                        successFn(result);
+                        return;
+                    }
+                    $.hideBlock();
+                    XUI_dialog("请求成功，未对结果做任何处理，请检查");
+                } else {
+                    $.hideBlock();
+                    XUI_dialog(result.msg + "(code=" + result.code + ", data=" + result.data + ")");
+                }
+            },
+            error: function (errorObj) {
+                $.hideBlock();
+                if (errorFn) {
+                    errorFn(errorObj);
+                    return;
+                }
+                XUI_dialog("请求失败或发生异常：" + errorObj.status + "，" + errorObj.statusText);
+            }
+        });
     }
+
+
 });
 
 

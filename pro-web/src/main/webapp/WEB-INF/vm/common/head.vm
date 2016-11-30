@@ -1,6 +1,6 @@
 <head>
     <meta charset="utf-8"/>
-    <title>#if($title)$title - #end 多点管理系统</title>
+    <title>#if($title)$title - #end 管理系统</title>
     <meta name="description" content="Static & Dynamic Tables"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 

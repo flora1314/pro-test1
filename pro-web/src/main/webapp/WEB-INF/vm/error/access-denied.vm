@@ -27,7 +27,7 @@
                         </h3>
                         <div class="space"></div>
                         <div>
-                            <h4 class="lighter smaller">请尝试以下操作</h4>
+                            <h4 class="lighter smaller">请尝试以下操作1</h4>
                             <ul class="spaced bigger-110 margin-15">
                                 <li>
                                     根据以上异常信息，或点击下方【查看错误详情】按钮排查问题
@@ -45,7 +45,7 @@
                         <div class="center">
                             <a href="javascript:history.back()" class="btn btn-grey">
                                 <i class="icon-arrow-left"></i>
-                                返回上页
+                                返回上页1
                             </a>
                             <a href="/" class="btn btn-primary">
                                 <i class="icon-home"></i>

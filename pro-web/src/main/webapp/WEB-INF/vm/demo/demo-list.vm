@@ -1,12 +1,11 @@
-#set($title="会员注册情况统计")
+#set($title="this is test")
 <div class="breadcrumbs">
     <ul class="breadcrumb" id="breadcrumbs">
         <li>
             <i class="icon-home home-icon"></i>
             <a href="/">首页</a>
         </li>
-        <li>会员统计</li>
-        <li>会员注册情况统计</li>
+        <li>test</li>
     </ul>
 </div>
 
@@ -51,74 +50,9 @@
                         <div class="col-xs-4">
                             <table border="0" class="conTab" style="width: 100%;">
                                 <tr>
-                                    <td style="text-align:right">
-                                        <font color="red">*</font>日期：
-                                    </td>
+                                    <td class="title">姓名：</td>
                                     <td>
-                                        <input type="text" style="width: 96%;background: #fff!important;"
-                                               readOnly id="date1"
-                                               ##value="$!{dateTool.format('yyyy-MM-dd',$condition.regDateStart)} TO $!{dateTool.format('yyyy-MM-dd',$condition.regDateEnd)}"/>
-                                    </td>
-                                    <td class="comment">限一月</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-xs-4">
-                            <label class="col-xs-4 control-label">注册渠道：</label>
-                            <div class="input-group col-xs-6">
-                                <select class="form-control input-large" multiple="" data-placeholder="全部" id="platform">
-                                    <option value="">全部</option>
-                                    #foreach($key in $platforms.keySet())
-                                        <option value="${key}">${platforms.get($key)}</option>
-                                    #end
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xs-4">
-                            <label class="col-xs-4 control-label">注册区域：</label>
-                            <div class="input-group col-xs-6">
-                                <select class="form-control input-large" multiple="" data-placeholder="全部" id="city"></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-4">
-                            <table border="0" class="conTab" style="width: 100%;">
-                                <tr>
-                                    <td class="title">注册商家：</td>
-                                    <td>
-                                        <select class="form-control input-large" data-placeholder="全部" id="vender"></select>
-                                    </td>
-                                </tr>
-                            </table>
-                            #*
-                            <label class="col-xs-4 control-label">注册商家:</label>
-                            <div class="input-group col-xs-6">
-                                <select class="form-control input-large" data-placeholder="全部" id="vender"></select>
-                            </div>
-                            *#
-                        </div>
-                        <div class="col-xs-4">
-                            <label class="col-xs-4 control-label">注册门店：</label>
-                            <div class="input-group col-xs-6">
-                                <select class="form-control input-large" multiple="" data-placeholder="全部" id="store">
-                                    <option value="" disabled>请先选择商家</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xs-4">
-                            <table border="0">
-                                <tr>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm pull-left" type="button" id="btnSearch">
-                                            <i class="icon-search icon-on-left bigger-110"></i>查询
-                                        </button>
-                                    </td>
-                                    <td width="20px"></td>
-                                    <td>
-                                        <button class="btn btn-success btn-sm pull-left" type="button" id="btnExport">
-                                            <i class="icon-save icon-on-left bigger-110"></i>导出
-                                        </button>
+                                        <input type="text" placeholder="输入条件"/>
                                     </td>
                                 </tr>
                             </table>
@@ -132,32 +66,20 @@
         <div class="col-sm-12">
             <div class="tabbable">
                 <ul class="nav nav-tabs" id="myTab">
-                    <li class="active chart1">
-                        <a data-toggle="tab" href="#chart1">
-                            <i class="red icon-bar-chart bigger-110"></i>会员总数（注册渠道）
+                    <li class="active">
+                        <a data-toggle="tab" href="#content1">
+                            <i class="red icon-bar-chart bigger-110"></i>基本信息
                         </a>
                     </li>
-                    <li class="chart2">
-                        <a data-toggle="tab" href="#chart2">
-                            <i class="red icon-bar-chart bigger-110"></i> 新增会员（注册渠道）
-                        </a>
-                    </li>
-                    <li class="chart3">
-                        <a data-toggle="tab" href="#chart3">
-                            <i class="red icon-bar-chart bigger-110"></i>会员总数（注册区域）
-                        </a>
-                    </li>
-                    <li class="chart4">
-                        <a data-toggle="tab" href="#chart4">
-                            <i class="red icon-bar-chart bigger-110"></i>新增会员（注册区域）
+                    <li class="">
+                        <a data-toggle="tab" href="#content2">
+                            <i class="red icon-bar-chart bigger-110"></i>统计信息
                         </a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div id="chart1" class="tab-pane active"></div>
-                    <div id="chart2" class="tab-pane"></div>
-                    <div id="chart3" class="tab-pane"></div>
-                    <div id="chart4" class="tab-pane"></div>
+                    <div id="content1" class="tab-pane active"></div>
+                    <div id="content" class="tab-pane"></div>
                 </div>
             </div>
         </div>
@@ -168,70 +90,20 @@
             <table class="table table-bordered table-hover" id="aptitude-table">
                 <thead>
                     <tr>
-                        <th class="center" width="160px">日期</th>
-                        <th class="center" width="160px">注册渠道</th>
-                        <th class="center" width="90px">收缩/展开</th>
-                        <th class="center" width="300px">注册区域</th>
-                        <th class="center" width="160px">商家名称</th>
-                        <th class="center" width="120px">门店编号</th>
-                        <th class="center" width="200px">门店名称</th>
-                        <th class="center">会员总数（人）</th>
-                        <th class="center">新增会员（人）</th>
+                        <th class="center">编号</th>
+                        <th class="center">姓名</th>
+                        <th class="center">电话</th>
+                        <th class="center">年龄</th>
                     </tr>
                 </thead>
                 <tbody id="list" aria-relevant="all" aria-live="polite" role="alert">
                     <tr><td colspan="14" class="center">未开始查询</td></tr>
-
-                    #*
-                    #if(${page.result} && $page.result.size()>0)
-                        #foreach($row in $page.result)
-                            #set($hasData = ${row.regNum} > 0 || ${row.regNumTotal} > 0)
-                            #set($evenRow = (${row.regDate.getTime()}/86400000)%2 == 0)
-                            <tr  id='tr_${row.key}' style="font-weight: bold; #if($evenRow)background-color: #F4F4F4;#end  #if($hasData)color:blue;#end">
-                                <td class="center">$!{row.regDateStr}</td>
-                                <td class="center">
-                                    $!{row.platformName}
-                                </td>
-                                <td class="center">
-                                    #if($hasData)
-                                        <label class="pull-center inline">
-                                            <input id="" onclick="showDetail(this, '${row.key}');" checked="checked" type="checkbox" class="ace ace-switch ace-switch-5">
-                                            <span class="lbl"></span>
-                                        </label>
-                                    #else
-                                        无数据
-                                    #end
-                                </td>
-                                <td class="center" colspan="4">#if($hasData)小计#end</td>
-                                <td class="center">$!{row.regNumTotal}</td>
-                                <td class="center">$!{row.regNum}</td>
-                            </tr>
-
-                        #end
-                    #end
-                    *#
-
-                    #*
-                    #if(!$!page.totalCount || $!page.totalCount <=0)
-                    <tr><td colspan="14" class="center">暂无数据</td></tr>
-                    #end
-                    *#
-
                 </tbody>
             </table>
 
-            #*分页
-            <div style="margin-bottom:10px;">
-                #if(${page} && ${page.pageCount} > 0)
-                    #set($pageModule = $homeModule.getTarget("/memStatistic/platform/main"))
-                    #set($pageModule = $pageModule.addQueryData("type", "test"))
-                    #showPage($pageModule $!{page})
-                #end
-            </div>
-            *#
+            <div style="margin-bottom:10px;" id="page"></div>
 
         </div>
-
     </div>
 </div>
 
@@ -245,28 +117,9 @@
 
 <script src="$!homeModule.getTarget('/assets/view/common/common.js')"></script>
 <script src="$!homeModule.getTarget('/assets/view/common/showPage.js')"></script>
-<script src="$!homeModule.getTarget('/assets/view/memStatistic/mem-common.js')"></script>
-<script src="$!homeModule.getTarget('/assets/view/memStatistic/platform-main.js')"></script>
-<script src="$!homeModule.getTarget('/assets/view/memStatistic/platform-chart-util.js')"></script>
-<script src="$!homeModule.getTarget('/assets/view/memStatistic/platform-chart.js')"></script>
+<script src="$!homeModule.getTarget('/assets/view/demo/demo-list.js')"></script>
 
 <script type="text/javascript">
-    #*
-    var selectCityId;
-    var selectVenderId;
-    var selectStoreId;
-    #if($errorInfo)
-        alert("异常提示：$errorInfo");
-    #else
-        #if(${condition.cityIdList})
-            selectCityId = "$!{condition.cityIdList}";
-        #end
-        #if(${condition.venderIdList})
-            selectVenderId = "$!{condition.venderIdList}";
-        #end
-        #if(${condition.storeIdList})
-            selectStoreId = "$!{condition.storeIdList}";
-        #end
-    #end
-    *#
+
+
 </script>

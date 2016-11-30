@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class LogHelper {
 
-	public static final Logger TEST = LoggerFactory.getLogger("TEST");
+	public static final Logger TEST = LoggerFactory.getLogger("LOG_TEST");
 
 
 }

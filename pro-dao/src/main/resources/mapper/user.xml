@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.flora.dao.UserDao" >
+
+    <resultMap id="User" type="com.flora.domain.db.User" >
+        <id column="id" property="id" />
+        <id column="modified" property="modified" />
+    </resultMap>
+
+    <sql id="TABLE_NAME"><![CDATA[users]]></sql>
+
+    <!-- 全部条件 -->
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="id != null"><![CDATA[AND id = #{id}]]></if>
+            <if test="idList != null and idList.size &gt; 0">
+                <![CDATA[AND id IN]]>
+                <foreach collection="idList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <!-- 智能排序与分页 -->
+    <sql id="QUERY_ORDER_LIMIT_CONDTION">
+        <if test="orderFieldList != null and orderFieldList.size &gt; 0 and orderFieldTypeList != null and orderFieldTypeList.size &gt; 0">
+            <![CDATA[ORDER BY ]]>
+            <foreach collection="orderFieldList" item="orderField" open="" separator="," close="" index="idx">
+                <![CDATA[${orderField} ${orderFieldTypeList[idx]}]]>
+            </foreach>
+        </if>
+        <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0">
+            <![CDATA[LIMIT #{startIndex}, #{pageSize}]]>
+        </if>
+    </sql>
+
+    <!-- 查询列表 -->
+    <select id="selectEntryList" resultMap="User">
+        <![CDATA[
+          SELECT * FROM
+        ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="QUERY_WHERE_CLAUSE" />
+        <include refid="QUERY_ORDER_LIMIT_CONDTION" />
+    </select>
+
+</mapper>

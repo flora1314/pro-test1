@@ -13,8 +13,8 @@
         <div class="navbar-header pull-left">
             <a href="#" class="navbar-brand">
                 <small>
-                    <img src="$!homeModule.getTarget('/assets/img/logo_dmall.png')" width="90" height="23"/>
-                    多点管理系统
+                    ##<img src="$!homeModule.getTarget('/assets/img/logo_dmall.png')" width="90" height="23"/>
+                    管理系统
                 </small>
             </a>
             <!-- /.brand -->

@@ -4,7 +4,8 @@
 <script src="$!homeModule.getTarget('/assets/js/bootbox.min.js')"></script>
 <script src="$!homeModule.getTarget('/assets/loading/jquery.showLoading.js')"></script>
 <script src="$!homeModule.getTarget('/assets/js/jquery.cookie.js')"></script>
-<script src="$!erpModule.getTarget('/assets/js/erp/erp-menu.js?')$!erpModule" id="erp_user_menu_js"></script>
+##菜单
+##<script src="$!erpModule.getTarget('/assets/js/erp/erp-menu.js?')$!erpModule" id="erp_user_menu_js"></script>
 <script>
 window.XUI_dialog = function(message, title) {
     bootbox.dialog({

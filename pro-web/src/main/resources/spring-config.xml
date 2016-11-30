@@ -16,11 +16,7 @@
 	<context:property-placeholder location="classpath:conf/important.properties" />
 
 	<import resource="spring/spring-config-dao.xml" />
-	<import resource="spring/spring-config-datacenter-dao.xml" />
 	<import resource="spring/spring-config-service.xml" />
 	<import resource="spring/spring-config-servlet.xml" />
 <!-- 	<import resource="spring/spring-config-jobs.xml" /> -->
-	<import resource="spring/spring-config-dubbo-client.xml" />
-	
-<!-- 	<import resource="spring/spring-config-mongo-redis.xml" /> -->
 </beans>

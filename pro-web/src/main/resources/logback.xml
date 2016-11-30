@@ -2,7 +2,10 @@
 <configuration>
 
 	<!-- 缩短日志格式 -->
+	<!-- 老的格式，慎用 %M %F %C %L，容易造成性能问题
 	<property name="outPattern" value="[%-5p] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%c] - %m%n" />
+	-->
+	<property name="outPattern" value="[%-5p] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%C{0}:%L] - %m%n" />
 	<!-- 文件历史数 -->
 	<property name="maxHistory" value="30" />
 	<property name="charSet" value="UTF-8" />
