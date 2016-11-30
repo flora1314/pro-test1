@@ -16,8 +16,12 @@
     <!-- #sidebar-shortcuts -->
     <!--菜单开始-->
     <ul class="nav nav-list" id="menu_nav">
-        <li>
-          &nbsp;&nbsp;菜单加载中…
+        ##<li>&nbsp;&nbsp;菜单加载中…</li>
+        <li id="sys_1" class="active open"><a href="javascript:void(0)" class="dropdown-toggle"><i class="icon-lock"></i><span class="menu-text">后台管理</span><b class="arrow icon-angle-down"></b></a>
+            <ul class="submenu">
+                <li id="menu_2937" class="wm_menu_item" onclick=""><a href="http://www.baidu.com" class="dropdown-toggle"><i class="icon-double-angle-right"></i><span class="menu-text">用户信息管理</span></a></li>
+                <li id="menu_180" class="wm_menu_item" onclick=""><a href="http:///www.baidu.com" class="dropdown-toggle"><i class="icon-double-angle-right"></i><span class="menu-text">用户数据统计</span></a></li>
+            </ul>
         </li>
     </ul>
     <!-- /.nav-list --><!--/.菜单结束-->
