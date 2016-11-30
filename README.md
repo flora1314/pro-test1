@@ -1,7 +1,7 @@
 # pro-test1
 springmvc + mybatis for test and study
-aceadmin
-velocity
+aceadmin    1
+velocity    1
 
 job
 
