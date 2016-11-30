@@ -1,0 +1,120 @@
+<div class="breadcrumbs">
+    <ul class="breadcrumb" id="breadcrumbs">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/">首页</a>
+        </li>
+        <li>Worker管理</li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="col-md-12">
+		<br/>
+        <div class="table-responsive" id="jobbox">
+            <table id="worker-table" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="center">worker名称</th>
+                        <th class="center">当前状态</th>
+                        <th>手动执行</th>
+                        <th>触发频率</th>
+                        <th class="hidden-480">备注</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+					#foreach($jobkey in $schedulerMap.entrySet())
+					#set($jobvalue = $jobkey.value)
+                    <tr>
+                        <td>
+                            $jobvalue.schedulerName
+                        </td>
+                        <td>
+							#if($jobvalue.started&&!$jobvalue.inStandbyMode)
+                            <i class="icon-circle green"/>
+                            <span class="text-success">正在运行</span>
+							#end
+							#if(!$jobvalue.started||$jobvalue.inStandbyMode)
+                            <i class="icon-stop red"/>
+                            <span class="text-warning">已停止</span>
+							#end
+                        </td>
+                        <td>
+							#if($jobvalue.started&&!$jobvalue.inStandbyMode)
+                            <span>
+                                运行中
+                            </span>
+							#end
+							#if(!$jobvalue.started||$jobvalue.inStandbyMode)
+                            <span>
+                                <button class="btn btn-xs btn-danger radius-5" onclick='opration("startOnce", "${jobkey.key}")'>
+                                    <i class="icon-bolt bigger-110"></i>
+                                    运行一次
+                                </button>
+                            </span>
+							#end
+                        </td>
+                        <td>
+                            <input type="text" value="$!schedulerInfoMap[$!jobkey.key].cronExpression" id="cronExpression"/>
+                            <button data-loading type="button" class="btn btn-xs btn-info radius-5" onclick='opration("saveUpdate", "${jobkey.key}", document.getElementById("cronExpression").value)'>
+                                <i class="icon-pencil bigger-110"></i>
+                                更新频率
+                            </button>
+                        </td>
+                        <td class="">
+                            <p class="text-warning">非特殊情况切勿手动执行</p>
+                        </td>
+                        <td>
+							#if($jobvalue.started&&!$jobvalue.inStandbyMode)
+                            <span>
+                                <button data-loading type="button" class="btn btn-xs btn-danger radius-5" onclick='opration("stop", "${jobkey.key}")'>
+                                    <i class="icon-edit bigger-110"></i>
+                                    停止</button>
+                            </span>
+							#end
+							#if(!$jobvalue.started||$jobvalue.inStandbyMode)
+                            <span>
+                                <button data-loading type="button" class="btn btn-xs btn-success radius-5" onclick='opration("start", "${jobkey.key}")'>
+                                    <i class="icon-edit bigger-110"></i>
+                                    启动</button>
+                            </span>
+							#end
+                        </td>
+                    </tr>
+					#end
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+	function opration(method, key, params1) {
+	    var str = "";
+		if (method == 'startOnce' && 'pointsStatistic' == key) {
+		    str = "手动执行将删除昨天所有积分流水分析、统计数据，是否继续?"
+		} else {
+		    str = "确认执行方法【" + method + "】?"
+		}
+		bootbox.confirm(str, function (result) {
+			if (!result) return;
+			var pageContent = $("#jobbox").showLoading();
+			jQuery.ajax({
+	            url: "/jobs/" + method + "?key=" + key + "&params1=" + (params1 || ""),
+	            type: 'post',
+	            success: function (data) {
+	            	pageContent.hideLoading();
+					if(data.code == "0000") {
+						XUI_dialog("操作成功");
+						location.href = location.href;
+					} else {
+						XUI_dialog(data.msg);
+					}
+	            },
+	            error: function (errorObj) {
+	            	pageContent.hideLoading();
+					XUI_dialog("网络错误");
+	            }
+	        });
+		})
+	}
+</script>

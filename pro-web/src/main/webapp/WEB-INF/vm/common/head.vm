@@ -1,0 +1,20 @@
+<head>
+    <meta charset="utf-8"/>
+    <title>#if($title)$title - #end 多点管理系统</title>
+    <meta name="description" content="Static & Dynamic Tables"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link href="$!homeModule.getTarget('/assets/css/bootstrap.min.css')" rel="stylesheet"/>
+	<link rel="stylesheet" href="$!homeModule.getTarget('/assets/jqgrid/ui.jqgrid.erp.css')" />
+    <link rel="stylesheet" href="$!erpModule.getTarget('/assets/css/ace.min.css')"/>
+    <link rel="stylesheet" href="$!homeModule.getTarget('/assets/css/font-awesome.min.css')"/>
+    <link rel="stylesheet" href="$!homeModule.getTarget('/assets/loading/jquery.showLoading.css')"/>
+	<link rel="stylesheet" href="$!homeModule.getTarget('/assets/chosen/chosen.min.css')"/>
+	<link rel="stylesheet" href="$!homeModule.getTarget('/assets/daterangepicker/daterangepicker.min.css')" />
+    <style>
+        .navbar { z-index : 4}	
+        .sidebar { z-index : 3}	
+        .ui-jqgrid-bdiv { overflow: hidden!important }
+    </style>
+    <script src="$!homeModule.getTarget('/assets/js/jquery-1.11.0.min.js')"></script>
+</head>

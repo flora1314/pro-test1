@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dmall.cem.dao.MemStatisticGroupInfoDao" >
+
+    <sql id="QUERY_FROM_TABLE">
+      <![CDATA[ FROM cem_mem_group_statistic ]]>
+    </sql>
+    <sql id="TABLE_NAME">
+        <![CDATA[ cem_mem_group_statistic ]]>
+    </sql>
+
+    <!-- 全部条件 -->
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="regDate != null"><![CDATA[AND reg_date = #{regDate}]]></if>
+            <if test="groupType != null"><![CDATA[AND group_type = #{groupType}]]></if>
+            <if test="platform != null"><![CDATA[AND platform = #{platform}]]></if>
+            <if test="cityIdList != null and cityIdList.size &gt; 0">
+                <![CDATA[AND city_id IN]]>
+                <foreach collection="cityIdList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+            <if test="storeIdList != null and storeIdList.size &gt; 0">
+                <![CDATA[AND store_id IN]]>
+                <foreach collection="storeIdList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+
+    <select id="groupInfoStattList" resultType="com.dmall.cem.domain.model.MemStatisticGroupInfo">
+        <![CDATA[
+          SELECT
+              group_key AS groupKey,
+              COUNT(reg_num_y) AS regNumY,
+              COUNT(reg_num_n) AS regNumN
+        ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="QUERY_WHERE_CLAUSE" />
+        <![CDATA[
+          GROUP BY group_key
+        ]]>
+    </select>
+
+    <select id="maxStattDate" resultType="java.util.Date">
+        <![CDATA[ SELECT MAX(reg_date) ]]>
+        <include refid="QUERY_FROM_TABLE" />
+    </select>
+
+
+    <!--以下是更新语句，慎重修改!!!!!!!!!!!!-->
+
+    <!-- 批量插入/更新记录 -->
+    <insert id="batchInsertOrUpdate" useGeneratedKeys="false">
+        <![CDATA[
+			INSERT INTO
+		]]>
+        <include refid="TABLE_NAME" />
+        <![CDATA[
+			  (
+			    reg_date, reg_num_y, reg_num_n, vender_id, vender_name, store_id, store_sap_id, store_name, group_type, group_key,
+			    platform, province_id, province_name, city_id, city_name, properties, info, created, modified, yn
+			  )
+			VALUES
+		]]>
+        <foreach collection="list" item="entry" index="index" separator="," >
+            <![CDATA[
+			(
+				#{entry.regDate}, #{entry.regNumY}, #{entry.regNumN}, #{entry.venderId}, #{entry.venderName}, #{entry.storeId},
+				#{entry.storeSapId}, #{entry.storeName}, #{entry.groupType}, #{entry.groupKey}, #{entry.platform}, #{entry.provinceId},
+				#{entry.provinceName}, #{entry.cityId}, #{entry.cityName}, #{entry.properties}, #{entry.info}, #{entry.created},
+				#{entry.modified}, #{entry.yn}
+			)
+		]]>
+        </foreach>
+        <![CDATA[
+            ON DUPLICATE KEY
+            UPDATE
+            reg_num_y = VALUES(reg_num_y),
+            reg_num_n = VALUES(reg_num_n),
+            modified = VALUES(modified),
+            yn = VALUES(yn)
+        ]]>
+    </insert>
+
+</mapper>

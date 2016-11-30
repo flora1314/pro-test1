@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    		http://www.springframework.org/schema/beans/spring-beans.xsd
+       		http://www.springframework.org/schema/context 
+     		http://www.springframework.org/schema/context/spring-context.xsd
+     		http://www.springframework.org/schema/tx  
+			http://www.springframework.org/schema/tx/spring-tx.xsd"
+	default-autowire="byName">
+
+	<bean id="schedulerMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+<!-- 				<entry key="pointsStatistic" value-ref="pointsStatisticScheduler" /> -->
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<!-- 积分统计任务 -->
+	<bean id="pointsStatisticScheduler" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="schedulerName" value="积分统计调度器[pointsStatisticWorker]" />
+		<property name="triggers">
+			<list>
+				<ref bean="pointsStatisticJobTrigger" />
+			</list>
+		</property>
+		<property name="autoStartup" value="${job.pointsStatistic.autoStartup}" />
+	</bean>
+
+	<bean id="pointsStatisticJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="pointsStatisticJobDetail" />
+		<property name="cronExpression" value="${job.pointsStatistic.cron}" />
+	</bean>
+
+	<bean id="pointsStatisticJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pointsStatisticJob" />
+		<property name="targetMethod" value="execute" />
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="pointsStatisticJob" class="com.dmall.cem.service.job.PointsStatisticWorker" />
+
+</beans>
+
+
+

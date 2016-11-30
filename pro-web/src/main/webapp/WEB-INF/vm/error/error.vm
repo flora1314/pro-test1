@@ -1,0 +1,70 @@
+#set($layout="layout/custom.vm")
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>出错了</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="$!homeModule.getTarget('/assets/css/bootstrap.min.css')" rel="stylesheet" />
+        <link rel="stylesheet" href="$!erpModule.getTarget('/assets/css/ace.min.css')" />
+        <script src="$!homeModule.getTarget('/assets/js/jquery-1.11.0.min.js')"></script>
+    </head>
+    <body >
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- PAGE CONTENT BEGINS -->
+                <div class="error-container">
+                    <div class="well">
+                        <h1 class="grey lighter smaller">
+                            <span class="blue bigger-125">
+                                <i class="icon-ban-circle"></i>
+                                ERROR
+                            </span>
+                        </h1>
+                        <hr />
+                        <h3 class="lighter smaller">
+                            服务器异常 $!msg
+                        </h3>
+                        <div class="space"></div>
+                        <div>
+                            <h4 class="lighter smaller">请尝试以下操作</h4>
+                            <ul class="spaced bigger-110 margin-15">
+                                <li>
+                                    根据以上异常信息，或点击下方【查看错误详情】按钮排查问题
+                                </li>
+                                <li>
+                                    检查输入内容是否正确，或者稍后重试
+                                </li>
+                                <li>
+                                    联系管理员排查问题
+                                </li>
+                            </ul>
+                        </div>
+                        <hr />
+                        <div class="space"></div>
+                        <div class="center">
+                            <a href="javascript:history.back()" class="btn btn-grey">
+                                <i class="icon-arrow-left"></i>
+                                返回上页
+                            </a>
+                            <a href="/" class="btn btn-primary">
+                                <i class="icon-home"></i>
+                                返回系统首页
+                            </a>
+                            <a href="javascript:$('#errorDetail').toggle();" class="btn btn-warning">
+                                <i class="icon-book"></i>
+                                查看异常详情
+                            </a>
+                        </div>
+                        <br/>
+                        <div class="well" id="errorDetail" style="display:none;">
+                            $!exception
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dmall.cem.dao.FinanceStatisticMapper">
+
+	<resultMap id="BaseResultMap" type="com.dmall.cem.domain.FinanceStatistic">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="platform" property="platform" jdbcType="TINYINT" />
+		<result column="use_platform" property="usePlatform" jdbcType="TINYINT" />
+		<result column="grant_points" property="grantPoints" jdbcType="BIGINT" />
+		<result column="grant_fee" property="grantFee" jdbcType="BIGINT" />
+
+		<result column="use_points" property="usePoints" jdbcType="BIGINT" />
+		<result column="use_fee" property="useFee" jdbcType="BIGINT" />
+		<result column="expired_points" property="expiredPoints" jdbcType="BIGINT" />
+		<result column="expired_fee" property="expiredFee" jdbcType="BIGINT" />
+		<result column="rest_points" property="restPoints" jdbcType="BIGINT" />
+		<result column="rest_fee" property="restFee" jdbcType="BIGINT" />
+
+		<result column="date" property="date" jdbcType="DATE" />
+		<result column="updated" property="created" jdbcType="TIMESTAMP" />
+		<result column="updated" property="updated" jdbcType="TIMESTAMP" />
+		<result column="yn" property="yn" jdbcType="TINYINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		`id`,
+		`platform`,
+		`use_platform`,
+		`grant_points`,
+		`grant_fee`,
+		`use_points`,
+		`use_fee`,
+		`expired_points`,
+		`expired_fee`,
+		`rest_points`,
+		`rest_fee`,
+		`date`,
+		`created`,
+		`updated`,
+		`yn`
+	</sql>
+
+
+
+	<select id="selectCountOfDate" resultType="java.lang.Integer" parameterType="com.dmall.cem.domain.FinanceStatistic">
+		select COUNT(1)
+		from cem_finance_statistic
+		WHERE `date` = #{date}
+	</select>
+
+	<insert id="insert" parameterType="com.dmall.cem.domain.PointsHighMemberStatistic">
+		INSERT INTO cem_finance_statistic
+		(
+		`platform`,
+		`use_platform`,
+		`grant_points`,
+		`grant_fee`,
+		`use_points`,
+		`use_fee`,
+		`expired_points`,
+		`expired_fee`,
+		`rest_points`,
+		`rest_fee`,
+		`date`,
+		`created`,
+		`updated`,
+		`yn`)
+		VALUES (#{platform},#{usePlatform},#{grantPoints},#{grantFee},#{usePoints},#{useFee},#{expiredPoints},#{expiredFee},
+		#{restPoints},#{restFee},#{date},#{created},#{updated},#{yn})
+	</insert>
+
+
+	<select id="selectList" resultMap="BaseResultMap" parameterType="com.dmall.cem.domain.FinanceStatisticQuery">
+
+		<![CDATA[
+		select
+		`platform`,
+		`use_platform`,
+		SUM(`use_points`) as use_points,
+		SUM(`use_fee`) as use_fee
+		from cem_finance_statistic
+		WHERE `date`>=#{startTime} AND `date` <= #{endTime} AND `platform` IN
+		 ]]>
+		<foreach collection="platforms"  item="platform" index="index" separator="," open="(" close=")">
+			#{platform}
+		</foreach>
+		AND `use_platform` IN
+		<foreach collection="usePlatforms"  item="useplatform" index="index1" separator="," open="(" close=")">
+			#{useplatform}
+		</foreach>
+		GROUP BY `platform`,`use_platform`
+	</select>
+
+	<delete id="deleteByDate" parameterType="com.dmall.cem.domain.FinanceStatisticQuery">
+		<![CDATA[ DELETE  FROM cem_finance_statistic  WHERE `date` = #{date}]]>
+	</delete>
+</mapper>

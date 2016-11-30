@@ -1,0 +1,40 @@
+	a {
+	  color: blue;
+	  cursor:pointer;
+      /* text-decoration: underline; */
+	}
+
+        div.instructions_container {
+	   float: left;
+           width: 350px;
+           margin-right: 50px;
+
+        }
+
+	div#activity_pane {
+background-color: #e4e6e9;
+        }
+
+        div.example_links 
+         .link_category {
+           margin-bottom: 15px;
+        }
+
+.loading-indicator-bars {
+		background-image: url('images/loading-bars.gif');
+		width: 150px;
+	}
+
+.loading-indicator {
+	height: 80px;
+	width: 80px;
+	background: url( 'images/loading_new.gif' );
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.loading-indicator-overlay {
+	background-color: #e4e6e9;
+	opacity: 0.6;
+	filter: alpha(opacity = 60);
+}

@@ -1,0 +1,27 @@
+<script src="$!homeModule.getTarget('/assets/js/bootstrap.min.js')"></script>
+<script src="$!homeModule.getTarget('/assets/js/ace.min.js')"></script>
+<script src="$!homeModule.getTarget('/assets/js/ace-extra.min.js')"></script>
+<script src="$!homeModule.getTarget('/assets/js/bootbox.min.js')"></script>
+<script src="$!homeModule.getTarget('/assets/loading/jquery.showLoading.js')"></script>
+<script src="$!homeModule.getTarget('/assets/js/jquery.cookie.js')"></script>
+<script src="$!erpModule.getTarget('/assets/js/erp/erp-menu.js?')$!erpModule" id="erp_user_menu_js"></script>
+<script>
+window.XUI_dialog = function(message, title) {
+    bootbox.dialog({
+        title : title || "系统提示",
+        message : "<span class='bigger-110' style='word-wrap: break-word;'>" + message + "</span>",
+        buttons : {
+            "button" : {
+                "label" : "关闭",
+                "className" : "btn-sm",
+                callback : function() {}
+            }
+        }
+    });
+};
+jQuery('#main-container').on('click', 'button[data-loading]', function () {
+    var that = this;
+    that.disabled = "disabled";
+    setTimeout(function(){ that.disabled ="" }, 1000);
+});
+</script>

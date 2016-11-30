@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- 数据库驱动包位置 -->
+	<classPathEntry location="D:\dev\maven-lib\mysql\mysql-connector-java\5.1.26\mysql-connector-java-5.1.26.jar" />
+	<!-- defaultModelType -->
+	<!-- conditional:*这是默认值*,这个模型和下面的hierarchical类似，除了如果那个单独的类将只包含一个字段，将不会生成一个单独的类。 因此,如果一个表的主键只有一个字段,那么不会为该字段生成单独的实体类,会将该字段合并到基本实体类中。 -->
+	<!-- flat:该模型为每一张表只生成一个实体类。这个实体类包含表中的所有字段。**这种模型最简单，推荐使用。** -->
+	<!-- hierarchical:如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段， 则会为表生成一个包含所有BLOB字段的单独的实体类,然后为所有其他的字段生成一个单独的实体类。 MBG会在所有生成的实体类之间维护一个继承关系。 -->
+	<context id="DB2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
+		<plugin type="com.flora.dao.common.PaginationPlugin" />
+		<!-- org.mybatis.generator.plugins.ToStringPlugin -->
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+		<!-- 这个插件给由MBG生成的Java模型对象增加了equals和hashCode方法。 -->
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+		<!-- <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin> -->
+		<!-- 此处是将Example改名为Criteria 当然 想改成什么都行~ -->
+		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Query" />
+		</plugin>
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" /><!-- 是否取消注释 -->
+			<property name="suppressDate" value="true" /> <!-- 是否生成注释代时间戳 -->
+		</commentGenerator>
+		<!-- 数据库连接URL、用户名、密码 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.8.235:3306/dmall_cem"
+			userId="dev" password="111111">
+		</jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- 生成模型的包名和位置 (注意src目录必须存在，如果不存在我们需要手动创建) -->
+		<javaModelGenerator targetPackage="com.dmall.cem.domain" targetProject="dmall-cem-domain">
+			<!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
+			<property name="enableSubPackages" value="true" />
+			<!-- 是否针对string类型的字段在set的时候进行trim调用 -->
+			<property name="trimStrings" value="false" />
+		</javaModelGenerator>
+		<!-- 生成的mapper映射文件包名和位置 -->
+		<sqlMapGenerator targetPackage="mapper" targetProject="dmall-cem-dao/src/main/resources/">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- 生成的DAO的包名和位置 -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.dmall.cem.dao" targetProject="dmall-cem-dao">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- 要生成那些表 tableName:数据库中对于的表名；domainObjectName:你要生成的java对象的名字 -->
+		<table tableName="cem_points_statistic" domainObjectName="PointsStatistic" enableCountByExample="true" enableDeleteByExample="false"
+			enableSelectByExample="true" enableUpdateByExample="true">
+			<!-- 忽略列，不生成bean 字段 -->
+			<!-- <ignoreColumn column="FRED" /> -->
+			<!-- 指定列的java数据类型 -->
+			<!-- <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" /> -->
+			<generatedKey column="id" sqlStatement="Mysql" />
+		</table>
+	</context>
+</generatorConfiguration>

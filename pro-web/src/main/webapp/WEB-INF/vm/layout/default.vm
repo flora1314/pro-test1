@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh-cn" author="wr">
+    <!--样式头文件-->
+    #parse("common/head.vm")
+    <body class="no-skin" style="overflow-x: hidden;">
+        <!--框架头文件-->
+        #parse("mainFrame/frame-header.vm")
+        <!--框架菜单文件-->
+        #parse("mainFrame/frame-main.vm")
+        <!--文件footer-->
+        #parse("common/bottom.vm")
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 单个 SSDB 服务器的配置，其他几个类似的构造方法在此略去 -->
+    <bean id="singleServerSsdbClient" class="com.dmall.cem.dao.hyd.ssdb.SsdbClient" destroy-method="close">
+        <constructor-arg name="host" value="127.0.0.1"/>
+        <constructor-arg name="port" value="8888"/>
+        <constructor-arg name="timeoutSeconds" value="1"/>
+        <constructor-arg name="pass" value="9Djyj8qXCi3p1P6Ar3iyUMy8ZZL9a1au"/>
+    </bean>
+
+    <!-- 自定义 Sharding -->
+    <bean id="custShardingClient" class="com.dmall.cem.dao.hyd.ssdb.SsdbClient" destroy-method="close">
+        <constructor-arg name="sharding">
+            <bean class="com.dmall.cem.dao.hyd.ssdb.AjiaSharding"/>
+        </constructor-arg>
+    </bean>
+
+    <!-- 多台 SSDB 主从服务器的配置 -->
+    <bean id="ssdbServer1" class="com.dmall.cem.dao.hyd.ssdb.conf.Server">
+        <property name="host" value="127.0.0.1"/>
+        <property name="port" value="8888"/>
+        <property name="pass" value="9Djyj8qXCi3p1P6Ar3iyUMy8ZZL9a1au"/>
+        <property name="master" value="true"/>
+    </bean>
+    <bean id="singleClusterSsdbClient" class="com.dmall.cem.dao.hyd.ssdb.SsdbClient"
+          factory-method="fromSingleCluster" destroy-method="close">
+        <constructor-arg name="servers">
+            <list value-type="com.dmall.cem.dao.hyd.ssdb.conf.Server">
+                <ref bean="ssdbServer1"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- 多台 SSDB 负载均衡的配置（每个 Cluster 一台服务器） -->
+    <bean id="ssdbCluster1" class="com.dmall.cem.dao.hyd.ssdb.conf.Cluster" factory-method="fromSingleServer">
+        <constructor-arg name="server" ref="ssdbServer1"/>
+    </bean>
+    <bean id="shardingSsdbClient" class="com.dmall.cem.dao.hyd.ssdb.SsdbClient"
+          factory-method="fromClusters" destroy-method="close">
+        <constructor-arg name="clusters">
+            <list value-type="com.dmall.cem.dao.hyd.ssdb.conf.Cluster">
+                <ref bean="ssdbCluster1"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- 带命名的 cluster 节点 -->
+    <bean id="namedCluster" class="com.dmall.cem.dao.hyd.ssdb.conf.Cluster" factory-method="fromSingleServer">
+        <constructor-arg name="server" ref="ssdbServer1"/>
+        <property name="id" value="cluster1"/>
+    </bean>
+</beans>

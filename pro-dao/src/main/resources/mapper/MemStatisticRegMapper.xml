@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.flora.dao.CommonDao" >
+
+    <resultMap id="MemStatisticRegMap" type="com.dmall.cem.domain.model.MemStatisticReg" >
+        <id column="id" property="id" />
+        <id column="yn" property="yn" />
+        <id column="properties" property="properties" />
+        <id column="info" property="info" />
+        <id column="created" property="created" />
+        <id column="modified" property="modified" />
+        <id column="reg_date" property="regDate" />
+        <id column="reg_num" property="regNum" />
+        <id column="vender_id" property="venderId" />
+        <id column="vender_name" property="venderName" />
+        <id column="store_id" property="storeId" />
+        <id column="store_sap_id" property="storeSapId" />
+        <id column="store_name" property="storeName" />
+        <id column="platform" property="platform" />
+        <id column="province_id" property="provinceId" />
+        <id column="province_name" property="provinceName" />
+        <id column="city_id" property="cityId" />
+        <id column="city_name" property="cityName" />
+    </resultMap>
+
+    <sql id="QUERY_FROM_TABLE"><![CDATA[FROM cem_mem_reg_statistic]]></sql>
+
+    <!-- 全部条件 -->
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="id != null"><![CDATA[AND id = #{id}]]></if>
+            <if test="platform != null"><![CDATA[AND platform = #{platform}]]></if>
+            <if test="regDate != null"><![CDATA[AND reg_date = #{regDate}]]></if>
+            <if test="regDateStart != null"><![CDATA[AND reg_date >= #{regDateStart}]]></if>
+            <if test="regDateEnd != null"><![CDATA[AND reg_date <= #{regDateEnd}]]></if>
+            <if test="platformList != null and platformList.size &gt; 0">
+                <![CDATA[AND platform IN]]>
+                <foreach collection="platformList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+            <if test="cityIdList != null and cityIdList.size &gt; 0">
+                <![CDATA[AND city_id IN]]>
+                <foreach collection="cityIdList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+            <if test="venderIdList != null and venderIdList.size &gt; 0">
+                <![CDATA[AND vender_id IN]]>
+                <foreach collection="venderIdList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+            <if test="storeIdList != null and storeIdList.size &gt; 0">
+                <![CDATA[AND store_id IN]]>
+                <foreach collection="storeIdList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+            <if test="storeSapIdList != null and storeSapIdList.size &gt; 0">
+                <![CDATA[AND store_id IN]]>
+                <foreach collection="storeSapIdList" item="singleVal" open="(" separator="," close=")">
+                    <![CDATA[#{singleVal}]]>
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <!-- 智能排序与分页 -->
+    <sql id="QUERY_ORDER_LIMIT_CONDTION">
+        <if test="orderFieldList != null and orderFieldList.size &gt; 0 and orderFieldTypeList != null and orderFieldTypeList.size &gt; 0">
+            <![CDATA[ORDER BY ]]>
+            <foreach collection="orderFieldList" item="orderField" open="" separator="," close="" index="idx">
+                <![CDATA[${orderField} ${orderFieldTypeList[idx]}]]>
+            </foreach>
+        </if>
+        <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0">
+            <![CDATA[LIMIT #{startIndex}, #{pageSize}]]>
+        </if>
+    </sql>
+
+    <!-- 查询列表 -->
+    <select id="selectEntryList" resultMap="MemStatisticRegMap">
+        <![CDATA[
+          SELECT
+              reg_date AS regDate,
+              platform,
+              province_id AS provinceId,
+              city_id AS cityId,
+              province_name AS provinceName,
+              city_name AS cityName,
+              vender_id AS venderId,
+              vender_name AS venderName,
+              store_id AS storeId,
+              store_sap_id AS storeSapId,
+              store_name AS storeName,
+              reg_num AS regNum,
+              reg_num_total AS regNumTotal
+        ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="QUERY_WHERE_CLAUSE" />
+        <include refid="QUERY_ORDER_LIMIT_CONDTION" />
+    </select>
+
+    <!-- 会员注册基本情况统计 -->
+    <select id="regInfoStattList" resultType="com.dmall.cem.domain.model.MemStatisticReg">
+        <![CDATA[
+          SELECT
+              reg_date regDate,
+              platform,
+              province_id AS provinceId,
+              city_id AS cityId,
+              province_name AS provinceName,
+              city_name AS cityName,
+              vender_id AS venderId,
+              vender_name AS venderName,
+              store_id AS storeId,
+              store_sap_id AS storeSapId,
+              store_name AS storeName,
+              SUM(reg_num) regNum,
+              SUM(reg_num_total) AS regNumTotal
+        ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="QUERY_WHERE_CLAUSE" />
+        <![CDATA[
+            GROUP BY
+              reg_date,
+              store_id,
+              platform
+            ORDER BY
+              reg_date ASC,
+              platform ASC,
+              store_id ASC
+        ]]>
+    </select>
+
+    <!-- 会员注册时间+注册渠道的统计 -->
+    <select id="dateAndPlatStattList" resultType="com.dmall.cem.domain.model.MemStatisticReg">
+        <![CDATA[
+          SELECT
+              reg_date AS regDate,
+              platform,
+              SUM(reg_num) AS regNum,
+              SUM(reg_num_total) AS regNumTotal
+        ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="QUERY_WHERE_CLAUSE" />
+        <![CDATA[
+            GROUP BY
+              reg_date,
+              platform
+        ]]>
+    </select>
+
+    <!-- 查询注册渠道和指定日期下面的详情
+    <select id="platformDetailList" resultType="com.dmall.cem.domain.model.MemStatisticReg">
+        <![CDATA[
+          SELECT
+              reg_date AS regDate,
+              platform,
+              province_id AS provinceId,
+              city_id AS cityId,
+              province_name AS provinceName,
+              city_name AS cityName,
+              vender_id AS venderId,
+              vender_name AS venderName,
+              store_id AS storeId,
+              store_sap_id AS storeSapId,
+              store_name AS storeName,
+              SUM(reg_num) regNum,
+              SUM(reg_num_total) AS regNumTotal
+        ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <![CDATA[
+            WHERE
+              reg_date=#{regDate} AND platform=#{platform}
+            GROUP BY
+              store_sap_id
+            ORDER BY
+              store_sap_id ASC
+        ]]>
+    </select>
+     -->
+
+    <!-- 会员注册城市区域的统计 -->
+    <select id="cityStattList" resultType="com.dmall.cem.domain.model.MemStatisticReg">
+        <![CDATA[
+          SELECT
+              reg_date regDate,
+              city_id cityId,
+              city_name cityName,
+              SUM(reg_num) regNum,
+              SUM(reg_num_total) AS regNumTotal
+        ]]>
+        <include refid="QUERY_FROM_TABLE" />
+        <include refid="QUERY_WHERE_CLAUSE" />
+        <![CDATA[
+            GROUP BY
+              reg_date,
+              city_id
+        ]]>
+    </select>
+
+
+
+
+    <!--以下是更新语句，慎重修改!!!!!!!!!!!!-->
+
+    <!-- 批量插入/更新记录 -->
+    <insert id="batchInsertOrUpdate" useGeneratedKeys="false">
+        <![CDATA[
+			INSERT INTO cem_mem_reg_statistic
+			  (
+			    reg_date, reg_num, reg_num_total, vender_id, vender_name, store_id, store_sap_id, store_name,
+			    platform, province_id, province_name, city_id, city_name, properties, info, created,
+			    modified, yn
+			  )
+			VALUES
+		]]>
+        <foreach collection="list" item="entry" index="index" separator="," >
+        <![CDATA[
+			(
+				#{entry.regDate}, #{entry.regNum}, #{entry.regNumTotal}, #{entry.venderId}, #{entry.venderName}, #{entry.storeId},
+				#{entry.storeSapId}, #{entry.storeName}, #{entry.platform}, #{entry.provinceId}, #{entry.provinceName},
+				#{entry.cityId}, #{entry.cityName}, #{entry.properties}, #{entry.info}, #{entry.created}, #{entry.modified}, #{entry.yn}
+			)
+		]]>
+        </foreach>
+        <![CDATA[
+            ON DUPLICATE KEY
+            UPDATE
+            reg_num = VALUES(reg_num),
+            reg_num_total = VALUES(reg_num_total),
+            city_name = VALUES (city_name),
+            province_name = VALUES (province_name),
+            store_name = VALUES (store_name),
+            vender_name = VALUES (vender_name),
+            properties = VALUES(properties),
+            info = VALUES(info),
+            modified = VALUES(modified),
+            yn = VALUES(yn)
+        ]]>
+    </insert>
+
+
+</mapper>

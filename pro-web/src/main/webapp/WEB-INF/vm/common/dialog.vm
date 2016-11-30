@@ -1,0 +1,85 @@
+##############bootsrtap UI模态对话框vm页面#################################
+<div id="modal-table" class="modal fade" tabindex="-1">
+	<div class="modal-dialog" id='modal-dialog-id'>
+		<div class="modal-content">
+			<div class="modal-header no-padding">
+				<div class="table-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						<span class="white">&times;</span>
+					</button>
+					<span id='modal-title'></span><!--对话框title-->
+				</div>
+			</div><!-- /.modal-title -->
+
+			<!--对话框内容信息-->
+			<div class="modal-body no-padding" id='modal-content-id'></div>
+			<!--对话框footer-->
+			<div class="modal-footer no-margin-top">
+				<button class="btn btn-sm btn-danger pull-right" data-dismiss="modal" id='modal-cancel-btn'>
+					<i class="icon-remove"></i>
+					关闭
+				</button>
+			</div><!-- /.modal-footer -->
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal-table -->
+
+<script type="text/javascript">
+	jQuery(function($) {
+		window.closeDailog = function(){
+			$('#modal-table').modal('hide');
+		};
+		window.openDailog = function(uri,params,title,config){
+			var cfg = jQuery.extend(true, {},{'showFooter':true}, config || {});
+			if(uri.length < 1){
+				return;
+			}
+			
+			var $dialog = $('#modal-dialog-id')[0];
+			if(cfg && cfg.width){
+				$dialog.style.width = cfg.width;
+			}
+			if(cfg && cfg.height){
+				$dialog.style.height = cfg.height;
+			}
+			if(cfg.showFooter == false || cfg.showFooter == 'false'){
+				$('#modal-cancel-btn')[0].style.display = 'none';
+			}
+					
+			jQuery.ajax({
+        		url:uri,
+        		async:false,
+        		type:"post",
+				data:params,
+        		dataType:"html",//响应内容为html
+				timeout:5000,//单位毫秒
+        		success:function(data){
+					$('#modal-title').html(title);
+					$('#modal-content-id').html(data);
+					//打开对话框
+					$('#modal-table').modal({
+                        backdrop:false,
+                        keyboard:false,
+                        show:true
+                    });
+        		},
+        		error:function(XMLHttpRequest,textStatus,errorThrown){
+					$('#modal-content-id').html('<div class="center"><h3 class="blue lighter">操作失败！</h3></div>');
+					//打开对话框
+					$('#modal-table').modal({
+                        backdrop:false,
+                        keyboard:false,
+                        show:true
+                    });
+        		}
+        	});
+		};
+		
+		//定义对话框关闭时的事件(关闭时清空对话框内容区域)
+	    $('#modal-table').on('hidden.bs.modal', function () {
+		    $('#modal-dialog-id').removeAttr('style');
+		    $('#modal-content-id').html('');
+			$('#modal-cancel-btn')[0].style.display = 'inline';
+		});
+	});
+</script>
