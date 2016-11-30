@@ -2,5 +2,6 @@
 springmvc + mybatis for test and study
 aceadmin
 velocity
-job<br/>
-interceptor
+job
+
+spring mvc interceptor
